@@ -31,6 +31,7 @@ namespace AssetStudio
             }
 
             var m_Layer = reader.ReadInt32();
+            reader.ReadInt32(); //HACK: Skip unknown int32 to fix names in Ori WOTW
             m_Name = reader.ReadAlignedString();
         }
     }
