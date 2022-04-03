@@ -82,13 +82,13 @@ namespace AssetStudio
                 var m_LightmapIndex = reader.ReadUInt16();
                 var m_LightmapIndexDynamic = reader.ReadUInt16();
             }
-
+            reader.ReadInt64(); //HACK: Fix animator export in Ori WOTW
             if (version[0] >= 3) //3.0 and up
             {
                 var m_LightmapTilingOffset = reader.ReadVector4();
             }
 
-            if (version[0] >= 5) //5.0 and up
+            if (version[0] >= 4) //5.0 and up
             {
                 var m_LightmapTilingOffsetDynamic = reader.ReadVector4();
             }
