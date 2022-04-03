@@ -88,7 +88,7 @@ namespace AssetStudio
                 var m_LightmapTilingOffset = reader.ReadVector4();
             }
 
-            if (version[0] >= 4) //5.0 and up
+            if (version[0] >= 5) //5.0 and up
             {
                 var m_LightmapTilingOffsetDynamic = reader.ReadVector4();
             }
