@@ -715,6 +715,9 @@ namespace AssetStudioGUI
                     case MonoBehaviour m_MonoBehaviour:
                         PreviewMonoBehaviour(m_MonoBehaviour);
                         break;
+                    case Material m_Material:
+                        PreviewMaterialInfo(m_Material);
+                        break;
                     case Font m_Font:
                         PreviewFont(m_Font);
                         break;
@@ -957,6 +960,12 @@ namespace AssetStudioGUI
             }
             var str = JsonConvert.SerializeObject(obj, Formatting.Indented);
             PreviewText(str);
+        }
+
+        private void PreviewMaterialInfo(Material m_Material)
+        {
+            var mat = MaterialConverter.Convert(m_Material);
+            PreviewText(mat);
         }
 
         private void PreviewFont(Font m_Font)
