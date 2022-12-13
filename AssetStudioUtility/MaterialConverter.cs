@@ -8,6 +8,12 @@ namespace AssetStudio
         {
             StringBuilder sb = new StringBuilder();
 
+            if (material.m_Shader != null)
+            {
+                sb.AppendLine("Shader PathId = " + material.m_Shader.m_PathID);
+                sb.AppendLine("");
+            }
+
             if (material.m_SavedProperties.m_TexEnvs != null)
             {
                 sb.AppendLine("Textures --- ");
