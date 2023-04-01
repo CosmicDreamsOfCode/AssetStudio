@@ -1,6 +1,7 @@
 ﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System;
 using System.IO;
 
 namespace AssetStudio
@@ -10,12 +11,24 @@ namespace AssetStudio
         public static Image<Bgra32> ConvertToImage(this Texture2D m_Texture2D, bool flip)
         {
             var converter = new Texture2DConverter(m_Texture2D);
-            var buff = BigArrayPool<byte>.Shared.Rent(m_Texture2D.m_Width * m_Texture2D.m_Height * 4);
+            Size uncroppedSize = converter.GetUncroppedSize();
+            bool usesSwitchSwizzle = converter.UsesSwitchSwizzle();
+            var buff = BigArrayPool<byte>.Shared.Rent(uncroppedSize.Width * uncroppedSize.Height * 4);
             try
             {
                 if (converter.DecodeTexture2D(buff))
                 {
-                    var image = Image.LoadPixelData<Bgra32>(buff, m_Texture2D.m_Width, m_Texture2D.m_Height);
+                    Image<Bgra32> image;
+                    if (usesSwitchSwizzle)
+                    {
+                        image = Image.LoadPixelData<Bgra32>(buff, uncroppedSize.Width, uncroppedSize.Height);
+                        image.Mutate(x => x.Crop(m_Texture2D.m_Width, m_Texture2D.m_Height));
+                    }
+                    else
+                    {
+                        image = Image.LoadPixelData<Bgra32>(buff, m_Texture2D.m_Width, m_Texture2D.m_Height);
+                    }
+
                     if (flip)
                     {
                         image.Mutate(x => x.Flip(FlipMode.Vertical));
@@ -41,6 +54,11 @@ namespace AssetStudio
                 }
             }
             return null;
+        }
+
+        private static int CeilDivide(int a, int b)
+        {
+            return (a + b - 1) / b;
         }
     }
 }
